@@ -1,0 +1,24 @@
+# deep learning
+torch
+torchvision
+
+
+# API development
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Image Processing
+pillow
+numpy
+
+# Data Validation and Configuration
+pydantic
+pydantic-settings
+
+# Testing
+pytest
+httpx
+
+# code quality
+ruff
