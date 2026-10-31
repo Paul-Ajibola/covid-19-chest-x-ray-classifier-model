@@ -48,7 +48,7 @@ def health_check():
     return {"status": "healthy"}
 
 
-@app.get("/predict", response_model=PredictionResponse)
+@app.post("/predict", response_model=PredictionResponse)
 def predict(file: UploadFile = File(...)):
     """
     Endpoint to classify a chest X-ray image.
