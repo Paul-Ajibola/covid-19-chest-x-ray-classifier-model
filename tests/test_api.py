@@ -85,3 +85,41 @@ def test_predict_endpoint(monkeypatch):
     assert len(data["probabilities"]) == 4
 
 
+
+def test_invalid_file_upload(monkeypatch):
+
+    # Define a fake model configuration
+    fake_config = {
+        "num_classes": 4,
+        "class_names": [
+            "COVID",
+            "Lung_Opacity",
+            "Normal",
+            "Viral Pneumonia"
+        ]
+    }
+
+    # Mock model loading
+    def fake_load_model():
+        return object(), fake_config
+
+    monkeypatch.setattr(main, "load_model", fake_load_model)
+
+    # Create fake PDF content
+    fake_pdf = io.BytesIO(b"%PDF-1.4 This is a fake PDF file")
+
+    with TestClient(main.app) as client:
+
+        response = client.post(
+            "/predict",
+            files={
+                "file": (
+                    "document.pdf",
+                    fake_pdf,
+                    "application/pdf"
+                )
+            }
+        )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "The uploaded file is not a valid image."

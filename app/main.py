@@ -61,6 +61,12 @@ def predict(file: UploadFile = File(...)):
     model = ml_models["model"]
     config = ml_models["config"]
 
+    if not file.filename:
+        raise HTTPException(
+            status_code=400,
+            detail="No file was provided."
+        )
+
     try:
         # Generate prediction
         result = predict_image(
@@ -72,9 +78,9 @@ def predict(file: UploadFile = File(...)):
 
         return result
     
-    except Exception as e:
+    except ValueError as e:
          raise HTTPException(
               status_code=400,
-              detail=f"Image Prediction Failed: {str(e)}"
+              detail=str(e)
             )
 

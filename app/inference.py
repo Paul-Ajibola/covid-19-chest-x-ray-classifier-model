@@ -15,7 +15,7 @@ and class-wise probability scores.
 
 import torch
 import torch.nn as nn
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from torchvision import transforms
 
 
@@ -42,8 +42,17 @@ def predict_image(image_path, model, config, device):
     """
     Load an X-ray image and generate a prediction
     """
-    # copy the image
-    image = Image.open(image_path).convert("RGB")
+    try:
+        # copy the image
+        image = Image.open(image_path)
+        image.verify()
+
+        # reopen the image after verification
+        image = Image.open(image_path).convert("RGB")
+
+    except (UnidentifiedImageError, OSError):
+        raise ValueError("The uploaded file is not a valid image.")
+    
 
     # apply preprocessing
     transform = create_transform(config)
