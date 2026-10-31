@@ -1,3 +1,15 @@
+"""
+Model loading module for the chest X-ray classification application.
+
+This module reconstructs the trained DenseNet-121 architecture.
+loads the model configuration and trained weights, selects the appropriate
+computing device (CPU or GPU) and prepares the model for inference.
+
+The loaded odel and configuration are made available to other application
+components for image classification.
+"""
+
+
 import json
 from pathlib import Path
 
@@ -56,3 +68,5 @@ def load_model():
     model.eval()
 
     return model, config
+
+
