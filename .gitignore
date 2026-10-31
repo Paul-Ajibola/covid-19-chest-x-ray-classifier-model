@@ -38,3 +38,20 @@ venv.bak/
 .coverage
 htmlcov/
 .mypy_cache/
+
+
+# python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing
+.pytest_cache/
+
+# Ruff
+.ruff_cache/
+
+# operating system
+.DS_Store
+Thumbs.db
+

@@ -17,7 +17,9 @@ import torch
 import torch.nn as nn
 from PIL import Image, UnidentifiedImageError
 from torchvision import transforms
+import warnings
 
+MAX_IMAGE_PIXELS = 25_000_000
 
 
 def create_transform(config):
@@ -43,16 +45,51 @@ def predict_image(image_path, model, config, device):
     Load an X-ray image and generate a prediction
     """
     try:
-        # copy the image
-        image = Image.open(image_path)
-        image.verify()
+        with warnings.catch_warnings():
+            warnings.simplefilter(
+                "error",
+                Image.DecompressionBombWarning
+            )
 
-        # reopen the image after verification
-        image = Image.open(image_path).convert("RGB")
+            with Image.open(image_path) as image:
 
-    except (UnidentifiedImageError, OSError):
-        raise ValueError("The uploaded file is not a valid image.")
-    
+                # Check actual image format
+                if image.format not in ("JPEG", "PNG"):
+                    raise ValueError(
+                        "Unsupported image format. Please upload a JPEG or PNG image."
+                    )
+
+                # Check image dimensions
+                width, height = image.size
+
+                if width * height > MAX_IMAGE_PIXELS:
+                    raise ValueError(
+                        "Image dimensions exceed the allowed limit."
+                    )
+
+                # Verify image integrity
+                image.verify()
+
+            # Reopen the image because verify() invalidates the image object
+            with Image.open(image_path) as image:
+                image = image.convert("RGB")
+
+                # Force image decoding while the file is open
+                image.load()
+
+    except ValueError:
+        raise
+
+    except (
+        UnidentifiedImageError,
+        OSError,
+        Image.DecompressionBombError,
+        Image.DecompressionBombWarning
+        ):
+        raise ValueError(
+            "The uploaded file is not a valid or supported image."
+        )
+
 
     # apply preprocessing
     transform = create_transform(config)
@@ -66,6 +103,11 @@ def predict_image(image_path, model, config, device):
         outputs = model(image_tensor)
 
         probabilities = torch.softmax(outputs, dim=1)
+
+        if not torch.isinfinite(probabilities).all():
+            raise RuntimeError(
+                "Model produced invalid probability values."
+            )
 
         confidence, predicted_index = torch.max(
             probabilities, dim=1
@@ -86,5 +128,6 @@ def predict_image(image_path, model, config, device):
             )
         }
     }
+
 
 

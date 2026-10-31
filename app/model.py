@@ -69,4 +69,3 @@ def load_model():
 
     return model, config
 
-

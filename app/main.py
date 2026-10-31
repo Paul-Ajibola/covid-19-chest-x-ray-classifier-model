@@ -6,6 +6,19 @@ from app.schemas import PredictionResponse
 
 from contextlib import asynccontextmanager
 from app.model import load_model, DEVICE
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
+# (1024 bytes)
+MAX_FILE_SIZE = 10 * 1024 * 1024
+
+ALLOWED_CONTENT_TYPES = {
+    "image/jpeg",
+    "image/png"
+}
 
 # Store the loaded model and configuration
 ml_models = {}
@@ -48,26 +61,74 @@ def health_check():
     return {"status": "healthy"}
 
 
+@app.get("/ready")
+def readiness_check():
+
+    if "model" not in ml_models or "config" not in ml_models:
+        raise HTTPException(
+            status_code=503,
+            detail="Model is not ready."
+        )
+
+    return {
+        "status": "ready",
+        "model_loaded": True
+    }
+
+
+
 @app.post("/predict", response_model=PredictionResponse)
-def predict(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...)):
     """
     Endpoint to classify a chest X-ray image.
 
     Accepts an image file and returns the predicted class, confidence score,
     and class-wise probability scores.
     """
-    
-    # Get the model and configuration
-    model = ml_models["model"]
-    config = ml_models["config"]
-
-    if not file.filename:
-        raise HTTPException(
-            status_code=400,
-            detail="No file was provided."
-        )
 
     try:
+        if "model" not in ml_models or "config" not in ml_models:
+            raise HTTPException(
+                status_code=503,
+                detail="Model is not ready"
+            )
+        
+        # Get the loaded model and its configuration
+        model = ml_models["model"]
+        config = ml_models["config"]
+
+        
+
+        # Check whether a file was provided
+        if not file.filename:
+            raise HTTPException(
+                status_code=400,
+                detail="No file was provided."
+            )
+
+        if file.content_type not in ALLOWED_CONTENT_TYPES:
+            raise HTTPException(
+                status_code=400,
+                detail="Supported content type. Please upload a JPEG or PNG image."
+            )
+
+        # Check uploaded file size
+        file.file.seek(0, 2)
+        file_size = file.file.tell()
+        file.file.seek(0)
+
+        if file_size > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=413,
+                detail="File size exceeds the 10 MB limit."
+            )
+
+        if file_size == 0:
+            raise HTTPException(
+                status_code=400,
+                detail="The uploaded file is empty."
+            )
+
         # Generate prediction
         result = predict_image(
             image_path=file.file,
@@ -76,11 +137,29 @@ def predict(file: UploadFile = File(...)):
             device=DEVICE
         )
 
+        # Return prediction result
         return result
-    
+
+    except HTTPException:
+        raise
+
     except ValueError as e:
-         raise HTTPException(
-              status_code=400,
-              detail=str(e)
-            )
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        ) from e
+
+    except Exception:
+        logger.exception(
+            "Unexpected error during image prediction"
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="An unexpected error occurred while processing the image."
+        )
+
+    finally:
+        # Close the uploaded file after processing
+        await file.close()
 
