@@ -23,7 +23,9 @@ from torchvision import transforms
 def create_transform(config):
     """
     Prepare an X-ray image using the same preprocessing
-    applied during model training. 
+    applied during model training. It returns a transformation pipeline
+    with the configured image size, normalization mean, and standard deviation
+    in my model configuration.
     """
     return transforms.Compose([
         transforms.Resize((config["image_size"], config["image_size"])
@@ -75,4 +77,5 @@ def predict_image(image_path, model, config, device):
             )
         }
     }
+
 
