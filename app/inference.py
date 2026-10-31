@@ -104,7 +104,7 @@ def predict_image(image_path, model, config, device):
 
         probabilities = torch.softmax(outputs, dim=1)
 
-        if not torch.isinfinite(probabilities).all():
+        if not torch.isfinite(probabilities).all():
             raise RuntimeError(
                 "Model produced invalid probability values."
             )

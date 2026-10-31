@@ -1,4 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 # import inference function and PredictionResponse schema
 from app.inference import predict_image
@@ -7,6 +9,7 @@ from app.schemas import PredictionResponse
 from contextlib import asynccontextmanager
 from app.model import load_model, DEVICE
 import logging
+from pathlib import Path
 
 
 logger = logging.getLogger(__name__)
@@ -48,11 +51,22 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR / "frontend"
+SAMPLE_DIR = BASE_DIR / "sample_images"
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+app.mount("/samples", StaticFiles(directory=SAMPLE_DIR), name="samples")
+
 
 
 @app.get("/")
 def home():
-    return {"message": "CHEST X-RAY CLASSIFICATION API IS RUNNING!!!"}
+    return FileResponse(FRONTEND_DIR / "index.html")
+
+
+@app.get("/model-guide")
+def model_guide():
+    return FileResponse(FRONTEND_DIR / "index.html")
 
 
 

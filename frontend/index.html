@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f7f9">
+  <title>Chest X-ray classification | X-ray Classifier</title>
+  <link rel="stylesheet" href="/static/styles.css?v=2">
+</head>
+<body>
+  <header class="topbar">
+    <div class="nav-wrap">
+      <a class="brand" href="/" aria-label="X-ray Classifier home"><span class="brand-mark">✣</span><span class="brand-name">X-ray Classifier</span><span class="project-tag">CV PROJECTS</span></a>
+      <nav aria-label="Main navigation"><a class="nav-link active" href="/">Analyze</a><a class="nav-link" href="/model-guide">Model guide</a><a class="nav-link docs-link" href="#documentation" title="GitHub README link will be added when the project is complete">Documentation <span aria-hidden="true">↗</span></a></nav>
+      <span class="cap-icon" aria-hidden="true">♧</span>
+    </div>
+  </header>
+  <main class="page" id="analysis-page">
+    <div class="page-heading"><div><h1>Chest X-ray classification</h1><p>Explore how AI interprets chest X-rays. Upload an image to get started.</p></div><span class="powered">Powered by DenseNet-121</span></div>
+    <div class="notice"><span class="info-icon">i</span><strong>Personal Project Portfolio</strong></div>
+    <section class="workspace">
+      <article class="panel upload-panel">
+        <div class="panel-title"><h2><span class="tiny-icon">▧</span> X-ray image</h2><span id="image-status" class="pill">No image</span></div>
+        <input id="file-input" type="file" accept="image/jpeg,image/png" hidden>
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Choose a chest X-ray image">
+          <span class="upload-icon">↥</span><div class="drop-copy"><strong>Drag &amp; drop a chest X-ray here</strong><span>JPG or PNG · Up to 10 MB</span></div><button class="secondary-button" id="browse-button" type="button">Browse files</button>
+        </div>
+        <div class="image-view empty-preview"><div class="image-label">IMAGE PREVIEW</div><img id="preview" alt="No image selected"><div class="image-caption"><span>Select an image to preview</span></div></div>
+        <div class="file-row"><span class="file-icon">♧</span><div><strong id="file-name">No image selected</strong><span id="file-meta">JPG or PNG · Up to 10 MB</span></div><button class="remove-button" id="clear-image" aria-label="Clear selected image" hidden>×</button></div>
+        <button class="primary-button analyze-button" id="analyze-button"><span>⛶</span> Analyze image</button>
+        <p class="privacy-note">Use de-identified images only. Never upload patient details.</p>
+      </article>
+      <article class="panel results-panel">
+        <div class="panel-title"><h2>Prediction results</h2><span id="result-status" class="pill">Ready</span></div>
+        <div class="prediction-card" id="prediction-card"><div class="prediction-top"><span>Predicted class</span><span class="layers-icon">▤</span></div><div class="prediction-main"><h3 id="predicted-class">Awaiting analysis</h3><div class="confidence-line"><strong id="confidence">—</strong><span>model confidence</span></div><p>Model confidence is not diagnostic certainty.</p></div></div>
+        <div class="probability-heading"><strong>Class probabilities</strong><span id="total-probability">Total —</span></div>
+        <div id="probabilities" class="probabilities"><p class="empty-state">Choose an image and select Analyze image to see the model output.</p></div>
+        <div class="results-note"><span class="info-icon">i</span><div><strong>An example, not a medical finding</strong><p>These outputs show the model’s class scores. They do not confirm a condition or assess health.</p></div></div>
+      </article>
+    </section>
+    <section class="model-strip"><div class="chip-icon">▧</div><div class="strip-kicker">BEHIND THE MODEL<strong>DenseNet-121</strong></div><div class="strip-copy"><strong>One image. Four possible classes.</strong><p>A convolutional neural network explores patterns in chest X-rays. Outputs may be incorrect and are intended for learning only.</p></div><a href="/model-guide" class="text-link">Model guide <span>→</span></a></section>
+    <footer>© 2026</footer>
+  </main>
+  <main class="page guide-page" id="guide-page" hidden>
+    <div class="page-heading"><div><h1>Model guide</h1><p>Understand the model, prepare an image and make sense of its outputs.</p></div><a class="primary-button return-button" href="/">Return to analysis <span>→</span></a></div>
+    <div class="notice"><span class="info-icon">i</span><strong>Personal Project Portfolio</strong></div>
+    <section class="guide-card"><h2 class="section-title"><span>01</span> What the model does</h2><div class="model-explainer"><div><span class="pill teal-pill">DenseNet-121</span><h3>One image. Four possible classes.</h3><p>Thorax uses DenseNet-121, a convolutional neural network, to look for visual patterns in a chest X-ray. It assigns a probability to each of four classes and displays the highest-scoring class as its prediction.</p></div><div class="flow-card"><span>FROM IMAGE TO OUTPUT</span><div class="flow-items"><div class="flow-xray"><img src="/samples/x-ray.jpeg" alt="Sample X-ray"><small>X-ray</small></div><span class="flow-arrow">→</span><div class="flow-model">▧<strong>DenseNet-121</strong></div><div class="flow-bars"><i></i><i></i><i></i><i></i><small>4 scores</small></div></div></div></div><div class="class-grid"><div><strong>COVID</strong><p>The model’s COVID category. It does not confirm an infection.</p></div><div><strong>Lung Opacity</strong><p>An opacity-related category, not an explanation of its cause.</p></div><div><strong>Normal</strong><p>The model’s normal category. It does not confirm that a person is healthy.</p></div><div><strong>Viral Pneumonia</strong><p>The model’s viral pneumonia category. It does not establish a diagnosis.</p></div></div></section>
+    <section class="guide-card"><h2 class="section-title"><span>02</span> Prepare, upload, analyze</h2><div class="steps-grid"><div><b>1</b><div><strong>Prepare a de-identified image</strong><p>Remove names, dates of birth, IDs and other patient details from the image, filename and file metadata before uploading.</p></div></div><div><b>2</b><div><strong>Upload and check the preview</strong><p>Use Browse files or drag and drop on desktop. Choose a JPG or PNG up to 10 MB, then confirm the intended chest X-ray is shown.</p></div></div><div><b>3</b><div><strong>Analyze and explore the result</strong><p>Select Analyze image. Review the predicted class, its confidence score and all four class probabilities together.</p></div></div></div><a class="guide-inline-link" href="/">Ready to explore? Upload a de-identified image in Analyze.</a></section>
+    <section class="guide-card output-card"><h2 class="section-title"><span>03</span> Understand the output</h2><div class="output-layout"><div class="output-copy"><div><strong>Predicted class = the highest score</strong><p>The class with the highest probability is displayed as the prediction. It is a model label, not confirmation of health.</p></div><div><strong>Confidence = the selected class’s score</strong><p>The confidence score is the probability assigned to the predicted class. It does not mean the prediction is correct.</p></div><div><strong>Read the whole distribution</strong><p>The four scores total 100%. They show how the model distributes its output across these classes, not four separate diagnoses. Close scores show a less clear preference.</p></div></div><div class="example-result"><div class="example-head"><strong>Example result</strong><span class="pill">Illustrative only</span></div><div class="prediction-card example-prediction"><div class="prediction-top"><span>Predicted class</span></div><div class="prediction-main"><h3>Normal</h3><div class="confidence-line"><strong>92.4<small>%</small></strong></div><p>Model confidence, not diagnostic certainty</p></div></div><div class="probability-heading"><strong>Class probabilities</strong><span>Total 100%</span></div><div class="example-bars"></div><p class="example-disclaimer">These numbers explain the interface. They are not a medical finding or a measure of model performance.</p></div></div></section>
+    <section class="guide-card limits-card"><h2 class="section-title"><span>04</span> Keep the limits in mind</h2><div class="limits-grid"><div><strong>It can make mistakes</strong><p>Visual patterns can be ambiguous. Image quality and differences between images can affect the output. A confident result may still be incorrect.</p></div><div><strong>Four classes are not the full picture</strong><p>The model only scores these four categories. Other findings and conditions are outside this output; a low score does not rule them out.</p></div><div><strong>It does not assess a person</strong><p>An image alone does not provide symptoms, history or clinical context. This demonstration cannot replace a qualified healthcare professional.</p></div></div><div class="notice limit-notice"><span class="info-icon">i</span><span>Do not base medical decisions on these outputs. For health concerns, seek advice from a qualified healthcare professional.</span></div></section>
+    <section class="guide-cta"><div><strong>Explore the analysis workspace</strong><p>Try the sample or upload a de-identified image. Keep these limitations in mind.</p></div><a class="primary-button" href="/">Return to analysis <span>→</span></a></section>
+    <footer>© 2026</footer>
+  </main>
+  <script src="/static/app.js?v=4" defer></script>
+</body>
+</html>

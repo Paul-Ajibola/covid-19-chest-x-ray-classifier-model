@@ -13,8 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # copy the application source code
 COPY app/ ./app/
 
+# copy the frontend and sample image used by the analysis workspace
+COPY frontend/ ./frontend/
+COPY sample_images/ ./sample_images/
+
 # copy the trained model artifacts
-COPY artifacts/ .artifacts/
+COPY artifacts/ ./artifacts/
 
 # Expose the port used by FastAPI
 EXPOSE 8000
