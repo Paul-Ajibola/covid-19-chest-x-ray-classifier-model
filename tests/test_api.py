@@ -123,7 +123,7 @@ def test_invalid_file_upload(monkeypatch):
         )
 
     assert response.status_code == 400
-    assert response.json()["detail"] == "The uploaded file is not a valid image."
+    assert response.json()["detail"] == "Unsupported content type. Please upload a JPEG or PNG image."
 
 
 def test_corrupted_image_upload(monkeypatch):
@@ -167,7 +167,7 @@ def test_corrupted_image_upload(monkeypatch):
     assert response.status_code == 400
 
     assert response.json()["detail"] == (
-        "The uploaded file is not a valid image."
+        "The uploaded file is not a valid or supported image."
     )
 
 
@@ -211,7 +211,7 @@ def test_empty_image_upload(monkeypatch):
     assert response.status_code == 400
 
     assert response.json()["detail"] == (
-        "The uploaded file is not a valid image."
+        "The uploaded file is empty."
     )
 
 
@@ -447,7 +447,7 @@ def test_unsupported_gif_upload(monkeypatch):
     assert response.status_code == 400
 
     assert response.json()["detail"] == (
-        "Unsupported image format. Please upload a JPEG or PNG image."
+        "Unsupported content type. Please upload a JPEG or PNG image."
     )
 
 def test_unexpected_prediction_error(monkeypatch):

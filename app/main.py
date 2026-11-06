@@ -123,7 +123,7 @@ async def predict(file: UploadFile = File(...)):
         if file.content_type not in ALLOWED_CONTENT_TYPES:
             raise HTTPException(
                 status_code=400,
-                detail="Supported content type. Please upload a JPEG or PNG image."
+                detail="Unsupported content type. Please upload a JPEG or PNG image."
             )
 
         # Check uploaded file size
