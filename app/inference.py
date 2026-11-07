@@ -13,11 +13,11 @@ and class-wise probability scores.
 """
 
 
+import warnings
+
 import torch
-import torch.nn as nn
 from PIL import Image, UnidentifiedImageError
 from torchvision import transforms
-import warnings
 
 MAX_IMAGE_PIXELS = 25_000_000
 

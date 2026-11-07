@@ -1,16 +1,15 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+import logging
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 # import inference function and PredictionResponse schema
 from app.inference import predict_image
+from app.model import DEVICE, load_model
 from app.schemas import PredictionResponse
-
-from contextlib import asynccontextmanager
-from app.model import load_model, DEVICE
-import logging
-from pathlib import Path
-
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +91,7 @@ def readiness_check():
 
 
 @app.post("/predict", response_model=PredictionResponse)
-async def predict(file: UploadFile = File(...)):
+async def predict(file: UploadFile = File(...)):     # noqa: B008 (tell ruff to ignore the B008 warning about using mutable default arguments)
     """
     Endpoint to classify a chest X-ray image.
 

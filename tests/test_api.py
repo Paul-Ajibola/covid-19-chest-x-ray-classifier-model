@@ -1,11 +1,11 @@
-from fastapi.testclient import TestClient
-# import the FastAPI application that we are testing
-import app.main as main
-
 import io
-from PIL import Image
-import torch
 
+import torch
+from fastapi.testclient import TestClient
+from PIL import Image
+
+# import the FastAPI application that we are testing
+from app import main
 
 # create a TestClient connected to our application
 client = TestClient(main.app)

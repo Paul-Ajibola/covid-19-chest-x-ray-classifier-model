@@ -14,9 +14,8 @@ import json
 from pathlib import Path
 
 import torch
-import torch.nn as nn
+from torch import nn
 from torchvision import models
-
 
 # locate the project root directory
 BASE_DIR = Path(__file__).resolve().parent.parent
