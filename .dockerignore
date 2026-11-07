@@ -1,0 +1,43 @@
+
+# Python virtual environments
+venv/
+.venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Git files
+.git/
+.gitignore
+
+# IDE and editor files
+.idea/
+.vscode/
+
+# Environment and secret files
+.env
+.env.*
+!.env.example
+
+# Test and coverage files
+.coverage
+htmlcov/
+.tox/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Documentation and development files
+README.md
