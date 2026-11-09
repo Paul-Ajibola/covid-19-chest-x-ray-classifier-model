@@ -4,6 +4,7 @@
 
 [![CI](https://github.com/Paul-Ajibola/covid-19-chest-x-ray-classifier-model/actions/workflows/ci.yml/badge.svg)](https://github.com/Paul-Ajibola/covid-19-chest-x-ray-classifier-model/actions)
 
+## Dataset: (/kaggle/input/datasets/tawsifurrahman/covid19-radiography-database)
 ## Overview
 
 This project is an end-to-end machine learning application designed to classify chest X-ray images into four categories:
