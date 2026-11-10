@@ -14,7 +14,7 @@ This project is an end-to-end machine learning application designed to classify 
 - Normal
 - Viral Pneumonia
 
-The project combines deep learning, computer vision, API development, automated testing, containerization, and cloud deployment.
+The project combines deep learning, computer vision, API development, automated testing, containerization, and deployment.
 
 A DenseNet-121 convolutional neural network was trained using PyTorch and selected as the final model after evaluation against a ResNet-18 baseline.
 
